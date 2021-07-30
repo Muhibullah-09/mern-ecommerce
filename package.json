@@ -1,0 +1,19 @@
+{
+  "name": "ecommerce-app",
+  "version": "1.0.0",
+  "description": "This is mern stack ecommerce App.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muhibullah-09/mern-ecommerce-2021.git"
+  },
+  "author": "Muhibullah Khan Kamali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Muhibullah-09/mern-ecommerce-2021/issues"
+  },
+  "homepage": "https://github.com/Muhibullah-09/mern-ecommerce-2021#readme"
+}
