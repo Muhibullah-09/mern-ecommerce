@@ -29,7 +29,7 @@ const userCtrl = {
             res.cookie('refreshtoken', refreshtoken, {
                 httpOnly: true,
                 path: '/user/refresh_token',
-                maxAge: 7*24*60*60*1000 // 7d
+                // maxAge: 7*24*60*60*1000 // 7d
             })
 
             res.json({accesstoken})
@@ -41,11 +41,15 @@ const userCtrl = {
     },
     login: async (req, res) =>{
         try {
+            //Users entered password and email come here
             const {email, password} = req.body;
 
+            //Here we match the email that entered by user with all the emails in database. if not found through error.
             const user = await Users.findOne({email})
             if(!user) return res.status(400).json({msg: "User does not exist."})
 
+            //Here we match the password that entered by user with all the passwords in database. if not found through error.
+            //before match we dcrypt the password that user entered.
             const isMatch = await bcrypt.compare(password, user.password)
             if(!isMatch) return res.status(400).json({msg: "Incorrect password."})
 
@@ -56,10 +60,11 @@ const userCtrl = {
             res.cookie('refreshtoken', refreshtoken, {
                 httpOnly: true,
                 path: '/user/refresh_token',
-                maxAge: 7*24*60*60*1000 // 7d
+                // maxAge: 7*24*60*60*1000 // 7d
             })
 
             res.json({accesstoken})
+            // res.json({msg: "Login success"})
 
         } catch (err) {
             return res.status(500).json({msg: err.message})
@@ -85,6 +90,7 @@ const userCtrl = {
 
                 res.json({accesstoken})
             })
+            res.json({rf_token});
 
         } catch (err) {
             return res.status(500).json({msg: err.message})
@@ -94,6 +100,7 @@ const userCtrl = {
     getUser: async (req, res) =>{
         try {
             const user = await Users.findById(req.user.id).select('-password')
+            // const user = await Users.findById(req.user.id).select(['-password','-email'])
             if(!user) return res.status(400).json({msg: "User does not exist."})
 
             res.json(user)
@@ -128,11 +135,10 @@ const userCtrl = {
 
 
 const createAccessToken = (user) =>{
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '11m'})
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'})
 }
 const createRefreshToken = (user) =>{
     return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'})
 }
 
-module.exports = userCtrl
-
+module.exports = userCtrl;
